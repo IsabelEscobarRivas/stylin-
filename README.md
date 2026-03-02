@@ -61,7 +61,7 @@ User Input (image / text)
    User Interface
 ```
 
-For full architecture documentation, see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+For full architecture documentation, see [`docs/ARCHITECTURE.md`](https://github.com/IsabelEscobarRivas/stylin-/blob/main/architecture.md).
 
 ---
 
