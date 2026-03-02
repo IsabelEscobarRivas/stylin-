@@ -1,0 +1,50 @@
+## Summary
+
+<!-- Describe WHAT this PR does and WHY. Be specific. -->
+
+-
+-
+
+## Type of Change
+
+<!-- Check all that apply -->
+
+- [ ] `feat` — New feature
+- [ ] `fix` — Bug fix
+- [ ] `refactor` — Code restructuring (no behavior change)
+- [ ] `docs` — Documentation only
+- [ ] `test` — Tests only
+- [ ] `chore` — Build, deps, CI
+
+## Related Issues
+
+<!-- Link issues this PR closes or references -->
+
+Closes #
+
+## Test Plan
+
+<!-- What did you do to verify this works? -->
+
+- [ ] Unit tests pass (`pytest`)
+- [ ] Manually tested end-to-end flow
+- [ ] Vision Scout response verified
+- [ ] Style Curator 3-tier output verified
+- [ ] No secrets or PII committed
+
+## Screenshots / Output
+
+<!-- Paste relevant output, logs, or screenshots if applicable -->
+
+```
+```
+
+## Checklist
+
+- [ ] Branch is not `main`, `develop`, or `sandbox`
+- [ ] Commits follow Conventional Commits format
+- [ ] No `.env` or secrets committed
+- [ ] Code follows PEP 8 / project style guidelines
+- [ ] Docstrings added for new public functions/classes
+- [ ] `logs/` directory excluded from commit
+- [ ] PR title follows Conventional Commits format
