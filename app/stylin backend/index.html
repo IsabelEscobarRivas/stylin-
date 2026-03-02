@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stylin' — AI Fashion Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Variables ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #FAF9F7;
+      --surface:      #FFFFFF;
+      --surface-2:    #F6F4F1;
+      --border:       #E8E3DB;
+      --border-strong:#D4CEC6;
+      --text:         #1C1C1A;
+      --text-muted:   #6B6560;
+      --text-faint:   #9B958F;
+      --accent:       #C4714A;
+      --accent-hover: #B0603B;
+      --accent-light: #F5E8E0;
+      --budget-color: #4E8052;
+      --budget-bg:    #EBF3EC;
+      --mid-color:    #8B6914;
+      --mid-bg:       #F5EDD3;
+      --luxury-color: #6B4E7E;
+      --luxury-bg:    #EDE6F3;
+      --r-sm: 8px; --r: 12px; --r-lg: 16px; --r-xl: 24px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+      --shadow:    0 4px 16px rgba(0,0,0,.08);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ────────────────────────────────────────────────────────────── */
+    header {
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .logo span { color: var(--accent); }
+    .tagline-header {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── Upload Section ────────────────────────────────────────────────────── */
+    .upload-hero {
+      max-width: 700px;
+      margin: 64px auto 80px;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .upload-hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 42px;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+    .upload-hero h1 em { font-style: italic; color: var(--accent); }
+    .upload-hero p {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* Tab toggle */
+    .tab-toggle {
+      display: inline-flex;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 2px;
+    }
+    .tab-btn {
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all .18s;
+    }
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Dropzone */
+    #drop-panel, #url-panel { width: 100%; }
+    #url-panel { display: none; }
+
+    .dropzone {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--r-xl);
+      padding: 48px 32px;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .dropzone:hover, .dropzone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .dropzone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2;
+    }
+    .dropzone-icon { font-size: 40px; margin-bottom: 12px; }
+    .dropzone-label { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+    .dropzone-sub { font-size: 13px; color: var(--text-faint); }
+
+    /* Image preview inside dropzone */
+    .dropzone.has-preview .dropzone-content { display: none; }
+    .preview-img {
+      display: none;
+      width: 100%; max-height: 280px;
+      object-fit: contain;
+      border-radius: var(--r);
+    }
+    .dropzone.has-preview .preview-img { display: block; }
+    .preview-caption {
+      display: none;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .dropzone.has-preview .preview-caption { display: block; }
+
+    /* URL input */
+    .url-input-wrap {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 20px 24px;
+    }
+    .url-input-wrap label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .url-input-wrap input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--surface-2);
+      outline: none;
+      transition: border-color .18s;
+    }
+    .url-input-wrap input:focus { border-color: var(--accent); background: var(--surface); }
+    .url-preview-img {
+      width: 100%; max-height: 220px; object-fit: contain;
+      border-radius: var(--r); margin-top: 14px; display: none;
+    }
+
+    /* CTA Button */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 16px 40px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 4px 20px rgba(196,113,74,.35);
+    }
+    .cta-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(196,113,74,.45); }
+    .cta-btn:active { transform: translateY(0); }
+    .cta-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* ── Loading Section ───────────────────────────────────────────────────── */
+    #loading-section {
+      display: none;
+      max-width: 560px;
+      margin: 80px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .loading-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: var(--accent-light);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .loading-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid var(--accent-light);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .loading-sub { font-size: 15px; color: var(--text-muted); margin-bottom: 36px; }
+    .loading-stages { display: flex; flex-direction: column; gap: 16px; text-align: left; }
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: all .3s;
+    }
+    .stage-item.active {
+      border-color: var(--accent);
+      color: var(--text);
+      background: var(--accent-light);
+    }
+    .stage-item.done {
+      border-color: var(--budget-color);
+      background: var(--budget-bg);
+      color: var(--budget-color);
+    }
+    .stage-icon { font-size: 20px; flex-shrink: 0; }
+    .stage-text { flex: 1; font-weight: 500; }
+    .stage-status { font-size: 12px; font-weight: 500; }
+
+    /* ── Results Section ───────────────────────────────────────────────────── */
+    #results-section {
+      display: none;
+      max-width: 1100px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+      animation: fadeUp .5s ease;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Analyze again bar */
+    .results-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .results-topbar-left { font-size: 14px; color: var(--text-muted); }
+    .results-topbar-left strong { color: var(--text); }
+    .reset-btn {
+      padding: 10px 22px;
+      background: transparent;
+      border: 1.5px solid var(--border-strong);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all .18s;
+    }
+    .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Section label */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 16px;
+    }
+
+    /* ── Persona Banner ────────────────────────────────────────────────────── */
+    .persona-banner {
+      background: var(--text);
+      color: white;
+      border-radius: var(--r-xl);
+      padding: 48px 56px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .persona-banner::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(196,113,74,.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .persona-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      margin-bottom: 14px;
+    }
+    .persona-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 48px;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+    .persona-tagline {
+      font-size: 17px;
+      color: rgba(255,255,255,.7);
+      font-weight: 300;
+      line-height: 1.5;
+      max-width: 520px;
+      margin-bottom: 28px;
+    }
+    .persona-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .persona-chip {
+      padding: 6px 14px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 100px;
+      font-size: 13px;
+      color: rgba(255,255,255,.85);
+    }
+
+    /* ── 2-col grid ────────────────────────────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* Card base */
+    .card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── Style Profile Card ────────────────────────────────────────────────── */
+    .profile-item-type {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      font-style: italic;
+      text-transform: capitalize;
+      margin-bottom: 6px;
+    }
+    .confidence-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: var(--budget-bg);
+      color: var(--budget-color);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .meta-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .color-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+    .color-swatch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px 5px 6px;
+      background: var(--surface-2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .swatch-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,.08); flex-shrink: 0; }
+    .pill {
+      padding: 5px 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: capitalize;
+    }
+    .pill.accent { background: var(--accent-light); border-color: rgba(196,113,74,.25); color: var(--accent); }
+    .divider { height: 1px; background: var(--border); margin: 18px 0; }
+
+    /* ── Persona Detail Card ───────────────────────────────────────────────── */
+    .persona-detail-section { margin-bottom: 16px; }
+    .brands-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .brand-pill {
+      padding: 5px 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .icons-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .icon-pill {
+      padding: 5px 12px;
+      background: var(--luxury-bg);
+      border: 1px solid rgba(107,78,126,.15);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--luxury-color);
+    }
+
+    /* ── Products Row ──────────────────────────────────────────────────────── */
+    .section-header { margin-bottom: 20px; }
+    .section-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      margin-bottom: 4px;
+    }
+    .section-header p { font-size: 14px; color: var(--text-muted); }
+
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+    @media (max-width: 700px) { .products-grid { grid-template-columns: 1fr; } }
+
+    .product-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .product-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      width: fit-content;
+    }
+    .tier-badge.budget { background: var(--budget-bg); color: var(--budget-color); }
+    .tier-badge.mid-range { background: var(--mid-bg); color: var(--mid-color); }
+    .tier-badge.luxury { background: var(--luxury-bg); color: var(--luxury-color); }
+    /* Product image — retailer-branded placeholder card */
+    .product-img-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      border-radius: var(--r);
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+    .product-img-placeholder::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.18);
+    }
+    .product-img-icon {
+      font-size: 36px;
+      position: relative; z-index: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+    }
+    .product-img-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,.92);
+      text-align: center;
+      line-height: 1.4;
+      position: relative; z-index: 1;
+      text-shadow: 0 1px 3px rgba(0,0,0,.4);
+      max-width: 120px;
+    }
+    /* Pexels real images */
+    .product-pexels-img {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--r);
+      margin-bottom: 16px;
+      display: block;
+      background: var(--surface-2);
+    }
+    .outfit-pexels-img {
+      width: 100%; height: 160px;
+      object-fit: cover;
+      display: block;
+      background: var(--surface-2);
+    }
+    .product-retailer { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+    .product-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .product-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; flex: 1; }
+    .product-price { font-size: 22px; font-weight: 600; margin-bottom: 16px; }
+    .product-price span { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+    .product-colors { display: flex; gap: 5px; margin-bottom: 16px; }
+    .shop-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 0;
+      background: var(--text);
+      color: white;
+      border-radius: var(--r);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .18s;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+    .shop-btn:hover { background: var(--accent); }
+
+    .swap-retailer-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 9px 0;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all .18s;
+    }
+    .swap-retailer-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Outfits ───────────────────────────────────────────────────────────── */
+    .outfits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+    @media (max-width: 700px) { .outfits-grid { grid-template-columns: 1fr; } }
+
+    .outfit-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .outfit-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    /* Outfit hero — occasion-toned gradient placeholder */
+    .outfit-hero-placeholder {
+      width: 100%; height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .outfit-hero-placeholder::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.15);
+    }
+    .outfit-hero-icon { font-size: 38px; position: relative; z-index: 1; }
+    .outfit-hero-label {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: rgba(255,255,255,.95);
+      position: relative; z-index: 1;
+      text-shadow: 0 1px 4px rgba(0,0,0,.4);
+      text-align: center;
+      padding: 0 16px;
+    }
+    .outfit-header {
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .outfit-number {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 6px;
+    }
+    .outfit-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+    .outfit-occasion {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      background: var(--surface-2);
+      border-radius: 100px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      border: 1px solid var(--border);
+    }
+    .outfit-vibe {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+    .outfit-items { padding: 16px 22px; }
+    .outfit-item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 6px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      border-radius: var(--r-sm);
+      margin: 0 -6px;
+      transition: background .15s;
+    }
+    .outfit-item-row:last-child { border-bottom: none; }
+    .outfit-item-row:hover { background: var(--surface-2); }
+    .outfit-item-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .outfit-item-details { flex: 1; min-width: 0; }
+    .outfit-item-name { font-size: 13px; font-weight: 500; text-transform: capitalize; }
+    .outfit-item-meta { font-size: 12px; color: var(--text-faint); margin-top: 1px; }
+    .outfit-item-price {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--surface-2);
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .outfit-tip {
+      padding: 14px 22px;
+      background: var(--accent-light);
+      border-top: 1px solid rgba(196,113,74,.15);
+      font-size: 13px;
+      color: var(--accent);
+      line-height: 1.5;
+      display: flex;
+      gap: 8px;
+    }
+    .outfit-tip-icon { flex-shrink: 0; }
+
+    /* ── Curator Notes ─────────────────────────────────────────────────────── */
+    .curator-notes {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 28px 32px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 40px;
+    }
+    .curator-notes-icon { font-size: 28px; flex-shrink: 0; }
+    .curator-notes-text { font-size: 15px; line-height: 1.6; color: var(--text-muted); font-style: italic; }
+
+    /* ── Latency Bar ───────────────────────────────────────────────────────── */
+    .latency-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .latency-chip {
+      padding: 6px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .latency-chip strong { color: var(--text); }
+
+    /* ── Error Banner ──────────────────────────────────────────────────────── */
+    .error-banner {
+      display: none;
+      padding: 14px 20px;
+      background: #FEE;
+      border: 1.5px solid #FCC;
+      border-radius: var(--r);
+      font-size: 14px;
+      color: #C00;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ───────────────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo">Stylin<span>'</span></div>
+  <span class="tagline-header">See a look you love. Own it.</span>
+</header>
+
+<!-- ── Upload Section ───────────────────────────────────────────────────────── -->
+<div id="upload-section">
+  <div class="upload-hero">
+    <h1>Drop a photo.<br><em>Own the look.</em></h1>
+    <p>Upload any fashion image and our AI finds exactly what it is,<br>where to buy it at every budget, and three complete outfits — built for you.</p>
+
+    <div class="tab-toggle">
+      <button class="tab-btn active" id="tab-upload" onclick="switchTab('upload')">📷 Upload Photo</button>
+      <button class="tab-btn" id="tab-url" onclick="switchTab('url')">🔗 Paste URL</button>
+    </div>
+
+    <!-- Upload panel -->
+    <div id="drop-panel">
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" />
+        <div class="dropzone-content">
+          <div class="dropzone-icon">🖼️</div>
+          <div class="dropzone-label">Drag & drop your photo here</div>
+          <div class="dropzone-sub">or click to browse — JPEG, PNG, WebP up to 10MB</div>
+        </div>
+        <img class="preview-img" id="upload-preview" alt="Preview" />
+        <div class="preview-caption" id="upload-caption"></div>
+      </div>
+    </div>
+
+    <!-- URL panel -->
+    <div id="url-panel">
+      <div class="url-input-wrap">
+        <label for="url-input">Paste any public fashion image URL</label>
+        <input type="url" id="url-input" placeholder="https://images.unsplash.com/..." oninput="onUrlInput()" />
+        <img class="url-preview-img" id="url-preview" alt="Preview" />
+      </div>
+    </div>
+
+    <div>
+      <button class="cta-btn" id="cta-btn" onclick="analyzePhoto()" disabled>
+        ✨ Style My Look
+      </button>
+    </div>
+    <div class="error-banner" id="error-banner"></div>
+  </div>
+</div>
+
+<!-- ── Loading Section ──────────────────────────────────────────────────────── -->
+<div id="loading-section">
+  <div class="loading-badge">
+    <div class="loading-spinner"></div>
+    Working its magic...
+  </div>
+  <div class="loading-title">Stylin' is on it.</div>
+  <div class="loading-sub">Two AI agents are collaborating on your look right now.</div>
+  <div class="loading-stages">
+    <div class="stage-item" id="stage-1">
+      <div class="stage-icon">👁️</div>
+      <div class="stage-text">Vision Scout — analyzing your photo</div>
+      <div class="stage-status" id="stage-1-status">Analyzing...</div>
+    </div>
+    <div class="stage-item" id="stage-2">
+      <div class="stage-icon">✨</div>
+      <div class="stage-text">Style Curator — building your looks</div>
+      <div class="stage-status" id="stage-2-status">Waiting...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Results Section ──────────────────────────────────────────────────────── -->
+<div id="results-section">
+  <div class="results-topbar">
+    <div class="results-topbar-left" id="results-meta"></div>
+    <button class="reset-btn" onclick="resetUI()">← Analyze another photo</button>
+  </div>
+
+  <!-- Latency -->
+  <div class="latency-bar" id="latency-bar"></div>
+
+  <!-- Persona Banner -->
+  <div class="persona-banner" id="persona-banner"></div>
+
+  <!-- 2-col: Style Profile + Persona Detail -->
+  <div class="two-col">
+    <div class="card" id="profile-card"></div>
+    <div class="card" id="persona-detail-card"></div>
+  </div>
+
+  <!-- Products -->
+  <div class="section-header">
+    <h2>Find This Look</h2>
+    <p>The exact item, sourced at every price point.</p>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+
+  <!-- Outfits -->
+  <div class="section-header">
+    <h2>Your Three Looks</h2>
+    <p>Complete, shoppable outfits built around your style.</p>
+  </div>
+  <div class="outfits-grid" id="outfits-grid"></div>
+
+  <!-- Curator Notes -->
+  <div class="curator-notes" id="curator-notes"></div>
+</div>
+
+<script>
+  /* API base — always same origin so CORS is never an issue */
+  const API_BASE = '';   // empty = relative URLs → same origin
+
+  /* Fetch up to 3 product photos for the matched-products grid.
+     Query: "{item_type} {style_tag}" — item-focused.
+     (PEXELS_KEY lives in .env on the server; it is never sent to the browser) */
+  async function fetchProductPhotos(query) {
+    try {
+      const r = await fetch(
+        `${API_BASE}/pexels/search?q=${encodeURIComponent(query)}&per_page=3&orientation=portrait`
+      );
+      const data = await r.json();
+      return (data.photos || []).map(p => p.src.medium);
+    } catch (e) {
+      console.warn('Pexels product fetch failed:', e);
+      return [];
+    }
+  }
+
+  /* Fetch one hero photo per outfit card using "fashion outfit {occasion}".
+     Each occasion gets its own Pexels query so the photo always matches the
+     card context (e.g. "fashion outfit casual brunch" vs "fashion outfit gala"). */
+  async function fetchOutfitPhotosByOccasion(occasions) {
+    const results = await Promise.all(
+      occasions.map(async occasion => {
+        const q = `fashion outfit ${occasion}`.trim();
+        try {
+          const r = await fetch(
+            `${API_BASE}/pexels/search?q=${encodeURIComponent(q)}&per_page=1&orientation=portrait`
+          );
+          const data = await r.json();
+          return (data.photos || [])[0]?.src?.medium || null;
+        } catch (e) {
+          console.warn(`Pexels outfit fetch failed for "${occasion}":`, e);
+          return null;
+        }
+      })
+    );
+    return results;   // array of URLs (or null) aligned 1-to-1 with outfits[]
+  }
+
+  let mode = 'upload';
+  let selectedFile = null;
+  let selectedUrl = null;
+
+  /* ── Tab switch ──────────────────────────────────────────────────────────── */
+  function switchTab(m) {
+    mode = m;
+    document.getElementById('tab-upload').classList.toggle('active', m === 'upload');
+    document.getElementById('tab-url').classList.toggle('active', m === 'url');
+    document.getElementById('drop-panel').style.display = m === 'upload' ? 'block' : 'none';
+    document.getElementById('url-panel').style.display = m === 'url' ? 'block' : 'none';
+    updateCta();
+  }
+
+  /* ── File handling ───────────────────────────────────────────────────────── */
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) setFile(file);
+  });
+
+  dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) setFile(file);
+  });
+
+  function setFile(file) {
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const preview = document.getElementById('upload-preview');
+      preview.src = ev.target.result;
+      document.getElementById('upload-caption').textContent = `${file.name} · ${(file.size / 1024).toFixed(0)} KB`;
+      dropzone.classList.add('has-preview');
+    };
+    reader.readAsDataURL(file);
+    updateCta();
+  }
+
+  /* ── URL handling ────────────────────────────────────────────────────────── */
+  function onUrlInput() {
+    const val = document.getElementById('url-input').value.trim();
+    selectedUrl = val || null;
+    const preview = document.getElementById('url-preview');
+    if (val) {
+      preview.src = val;
+      preview.style.display = 'block';
+      preview.onerror = () => { preview.style.display = 'none'; };
+    } else {
+      preview.style.display = 'none';
+    }
+    updateCta();
+  }
+
+  function updateCta() {
+    const ready = (mode === 'upload' && selectedFile) || (mode === 'url' && selectedUrl);
+    document.getElementById('cta-btn').disabled = !ready;
+  }
+
+  /* ── Analyze ─────────────────────────────────────────────────────────────── */
+  async function analyzePhoto() {
+    hideError();
+    showLoading();
+
+    // Stage timing
+    const s1 = document.getElementById('stage-1');
+    const s2 = document.getElementById('stage-2');
+    const s1s = document.getElementById('stage-1-status');
+    const s2s = document.getElementById('stage-2-status');
+    s1.className = 'stage-item active'; s1s.textContent = 'Analyzing...';
+    s2.className = 'stage-item';        s2s.textContent = 'Waiting...';
+
+    // Switch stage display after ~5s (Vision Scout expected ~4s)
+    const stageTimer = setTimeout(() => {
+      s1.className = 'stage-item done';  s1s.textContent = '✓ Done';
+      s2.className = 'stage-item active'; s2s.textContent = 'Building looks...';
+    }, 5000);
+
+    try {
+      let res;
+      if (mode === 'url') {
+        res = await fetch(`${API_BASE}/stylin`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image_url: selectedUrl }),
+        });
+      } else {
+        const fd = new FormData();
+        fd.append('file', selectedFile);
+        res = await fetch(`${API_BASE}/stylin/upload`, { method: 'POST', body: fd });
+      }
+
+      clearTimeout(stageTimer);
+
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const data = await res.json();
+
+      if (!data.success) throw new Error(data.error || 'Analysis failed');
+
+      s1.className = 'stage-item done'; s1s.textContent = '✓ Done';
+      s2.className = 'stage-item done'; s2s.textContent = '✓ Done';
+
+      setTimeout(() => renderResults(data), 400);
+
+    } catch (err) {
+      clearTimeout(stageTimer);
+      resetUI();
+      showError(err.message);
+    }
+  }
+
+  /* ── Render Results ──────────────────────────────────────────────────────── */
+  async function renderResults(data) {
+    const { style_profile: sp, curation_result: cr, session_id, latency } = data;
+
+    // Meta bar
+    document.getElementById('results-meta').innerHTML =
+      `Session <strong>${session_id}</strong> · Analyzed via Stylin' AI`;
+
+    // Latency
+    document.getElementById('latency-bar').innerHTML = [
+      `<div class="latency-chip">⏱ Total <strong>${(latency.total_ms/1000).toFixed(1)}s</strong></div>`,
+      `<div class="latency-chip">👁️ Vision Scout <strong>${(latency.vision_scout_ms/1000).toFixed(1)}s</strong></div>`,
+      `<div class="latency-chip">✨ Style Curator <strong>${(latency.style_curator_ms/1000).toFixed(1)}s</strong></div>`,
+    ].join('');
+
+    // Fetch Pexels images:
+    //   Products  — "{color} {tag} {item_type}" (item-focused)
+    //   Outfits   — "fashion outfit {occasion}" per card (occasion-focused)
+    const productQuery  = `${sp.item_type} ${(sp.style_tags||[])[0]||''}`.trim();
+    const outfitOccasions = (cr.outfits || []).map(o => o.occasion || '');
+    const [productPhotos, outfitPhotos] = await Promise.all([
+      fetchProductPhotos(productQuery),
+      fetchOutfitPhotosByOccasion(outfitOccasions),
+    ]);
+
+    renderPersonaBanner(cr.style_persona);
+    renderProfileCard(sp);
+    renderPersonaDetailCard(cr.style_persona);
+    renderProducts(cr.matched_products, sp, productPhotos);
+    renderOutfits(cr.outfits, sp, outfitPhotos);
+    renderCuratorNotes(cr.curator_notes);
+
+    document.getElementById('loading-section').style.display = 'none';
+    const rs = document.getElementById('results-section');
+    rs.style.display = 'block';
+    rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* Persona banner */
+  function renderPersonaBanner(persona) {
+    const traits = (persona.defining_traits || []).map(t =>
+      `<span class="persona-chip">${t}</span>`).join('');
+    document.getElementById('persona-banner').innerHTML = `
+      <div class="persona-label">Your Style Persona</div>
+      <div class="persona-name">${persona.name}</div>
+      <div class="persona-tagline">${persona.tagline}</div>
+      <div class="persona-chips">${traits}</div>
+    `;
+  }
+
+  /* Style Profile card */
+  function renderProfileCard(sp) {
+    const conf = Math.round(sp.confidence_score * 100);
+    const colors = (sp.colors || []).map(c =>
+      `<div class="color-swatch"><div class="swatch-dot" style="background:${colorNameToHex(c)}"></div>${c}</div>`
+    ).join('');
+    const tags = (sp.style_tags || []).map(t => `<span class="pill accent">${t}</span>`).join('');
+    const occasions = (sp.occasion || []).map(o => `<span class="pill">${o}</span>`).join('');
+    const tiers = (sp.price_tier || []).map(t =>
+      `<span class="tier-badge ${t}">${t === 'mid-range' ? '⚡' : t === 'budget' ? '💚' : '✦'} ${t}</span>`
+    ).join('');
+
+    document.getElementById('profile-card').innerHTML = `
+      <div class="card-title">🔍 Style Analysis</div>
+      <div class="profile-item-type">${sp.item_type}</div>
+      <div class="confidence-badge">✓ ${conf}% confident</div>
+      <div class="meta-label">Colors</div>
+      <div class="color-swatches">${colors}</div>
+      <div class="divider"></div>
+      <div class="meta-label">Style Tags</div>
+      <div class="meta-row">${tags}</div>
+      <div class="meta-label">Occasions</div>
+      <div class="meta-row">${occasions}</div>
+      <div class="divider"></div>
+      <div class="meta-row">
+        <span class="pill">🌸 ${sp.season}</span>
+        ${sp.fabric_hint ? `<span class="pill">${sp.fabric_hint}</span>` : ''}
+        ${sp.pattern ? `<span class="pill">${sp.pattern}</span>` : ''}
+      </div>
+      <div class="meta-row">${tiers}</div>
+    `;
+  }
+
+  /* Persona detail card */
+  function renderPersonaDetailCard(persona) {
+    const brands = (persona.brands_you_love || []).map(b =>
+      `<span class="brand-pill">${b}</span>`).join('');
+    const icons = (persona.style_icons || []).map(i =>
+      `<span class="icon-pill">★ ${i}</span>`).join('');
+    document.getElementById('persona-detail-card').innerHTML = `
+      <div class="card-title">🎨 Your Aesthetic</div>
+      <div class="persona-detail-section">
+        <div class="meta-label">Defining Traits</div>
+        <div class="meta-row">${(persona.defining_traits || []).map(t => `<span class="pill">${t}</span>`).join('')}</div>
+      </div>
+      <div class="divider"></div>
+      <div class="persona-detail-section">
+        <div class="meta-label">Brands You'll Love</div>
+        <div class="brands-list">${brands}</div>
+      </div>
+      ${icons ? `
+      <div class="divider"></div>
+      <div class="persona-detail-section">
+        <div class="meta-label">Style Icons</div>
+        <div class="icons-list">${icons}</div>
+      </div>` : ''}
+    `;
+  }
+
+  /* ── Retailer brand colors ──────────────────────────────────────────────── */
+  function retailerColor(name) {
+    const r = (name || '').toLowerCase();
+    if (r.includes('asos'))            return '#2D2D2D';
+    if (r.includes('zara'))            return '#161616';
+    if (r.includes('h&m') || r === 'hm') return '#E50010';
+    if (r.includes('target'))          return '#CC0000';
+    if (r.includes('anthropologie'))   return '#8B6B42';
+    if (r.includes('free people'))     return '#7B9B8E';
+    if (r.includes('madewell'))        return '#3D5A80';
+    if (r.includes('cos'))             return '#1A1A1A';
+    if (r.includes('other stories'))   return '#8C7B6B';
+    if (r.includes('reformation'))     return '#2D5016';
+    if (r.includes('sandro'))          return '#2B2B2B';
+    if (r.includes('theory'))          return '#2C3E50';
+    if (r.includes('net-a-porter') || r.includes('net a porter')) return '#000000';
+    if (r.includes('everlane'))        return '#4A4A48';
+    if (r.includes('uniqlo'))          return '#CC0000';
+    if (r.includes('veja'))            return '#8B7355';
+    if (r.includes('cuyana'))          return '#5C4A3C';
+    if (r.includes('eileen fisher'))   return '#6B6560';
+    if (r.includes('& other'))         return '#8C7B6B';
+    if (r.includes('banana republic')) return '#4A4035';
+    if (r.includes('j.crew') || r.includes('j crew')) return '#1B4F72';
+    if (r.includes('nordstrom'))       return '#1C2951';
+    if (r.includes('shopbop'))         return '#000000';
+    return '#3D3D3B'; // neutral fallback
+  }
+
+  /* ── Item type → emoji ───────────────────────────────────────────────────── */
+  function itemEmoji(name) {
+    const n = (name || '').toLowerCase();
+    if (n.includes('coat') || n.includes('jacket') || n.includes('blazer') || n.includes('outerwear')) return '🧥';
+    if (n.includes('dress'))           return '👗';
+    if (n.includes('skirt'))           return '🩱';
+    if (n.includes('pant') || n.includes('jean') || n.includes('trouser')) return '👖';
+    if (n.includes('top') || n.includes('shirt') || n.includes('blouse') || n.includes('tee')) return '👚';
+    if (n.includes('knit') || n.includes('sweater') || n.includes('cardigan') || n.includes('cashmere')) return '🧶';
+    if (n.includes('shoe') || n.includes('boot') || n.includes('sneaker') || n.includes('heel') || n.includes('mule') || n.includes('loafer') || n.includes('sandal') || n.includes('flat')) return '👟';
+    if (n.includes('bag') || n.includes('tote') || n.includes('clutch') || n.includes('purse') || n.includes('crossbody')) return '👜';
+    if (n.includes('hat') || n.includes('cap') || n.includes('beret')) return '🧢';
+    if (n.includes('scarf'))           return '🧣';
+    if (n.includes('belt'))            return '👔';
+    if (n.includes('short'))           return '🩳';
+    return '✨';
+  }
+
+  /* ── Occasion gradient for outfit hero ──────────────────────────────────── */
+  function occasionGradient(occasion) {
+    const o = (occasion || '').toLowerCase();
+    if (o.includes('brunch') || o.includes('lunch') || o.includes('coffee')) return 'linear-gradient(135deg,#C4714A,#E8A87C)';
+    if (o.includes('party') || o.includes('night') || o.includes('gala') || o.includes('black tie')) return 'linear-gradient(135deg,#2C1654,#6B3FA0)';
+    if (o.includes('travel') || o.includes('airport') || o.includes('transit')) return 'linear-gradient(135deg,#1A3A5C,#4A7BB0)';
+    if (o.includes('office') || o.includes('work') || o.includes('meeting') || o.includes('business')) return 'linear-gradient(135deg,#2C3E50,#4A5568)';
+    if (o.includes('beach') || o.includes('resort') || o.includes('holiday')) return 'linear-gradient(135deg,#0077B6,#48CAE4)';
+    if (o.includes('garden') || o.includes('outdoor') || o.includes('picnic')) return 'linear-gradient(135deg,#2D5016,#7CB87A)';
+    if (o.includes('museum') || o.includes('cultural') || o.includes('gallery')) return 'linear-gradient(135deg,#4A3728,#8B6347)';
+    if (o.includes('casual') || o.includes('weekend') || o.includes('errand')) return 'linear-gradient(135deg,#4A5568,#718096)';
+    if (o.includes('date') || o.includes('dinner') || o.includes('romantic')) return 'linear-gradient(135deg,#7B3F5E,#C06C84)';
+    if (o.includes('festival') || o.includes('concert') || o.includes('event')) return 'linear-gradient(135deg,#B5451B,#E8A87C)';
+    if (o.includes('wedding') || o.includes('formal')) return 'linear-gradient(135deg,#8B7355,#C4A882)';
+    return 'linear-gradient(135deg,#3D3D3B,#6B6560)'; // fallback
+  }
+
+  /* ── Encode query with + for spaces (required by some retailers) ─────────── */
+  function qPlus(str) {
+    return (str || '').trim().replace(/\s+/g, '+').replace(/[^a-zA-Z0-9+\-]/g, '');
+  }
+
+  /* ── Tier-based placeholder color (fix 5) ───────────────────────────────── */
+  function tierColor(tier) {
+    if (tier === 'budget')    return '#4E8052'; // sage green
+    if (tier === 'mid-range') return '#C4714A'; // warm terracotta
+    if (tier === 'luxury')    return '#6B4E7E'; // deep purple
+    return '#3D3D3B';
+  }
+
+  /* ── Real retailer search URLs ───────────────────────────────────────────── */
+  function getShopUrl(retailer, productName) {
+    const r = (retailer || '').toLowerCase();
+    const q = encodeURIComponent(productName);
+    const qp = qPlus(productName); // + encoded for retailers that need it
+    if (r.includes('asos'))            return `https://www.asos.com/search/?q=${qp}`;
+    if (r.includes('zara'))            return `https://www.zara.com/us/en/search?searchTerm=${qp}`;
+    if (r.includes('h&m') || r === 'hm') return `https://www2.hm.com/en_us/search-results.html?q=${qp}`;
+    if (r.includes('target'))          return `https://www.target.com/s?searchTerm=${qp}`;
+    if (r.includes('anthropologie'))   return `https://www.anthropologie.com/search?q=${qp}`;
+    if (r.includes('free people'))     return `https://www.freepeople.com/search/?q=${qp}`;
+    if (r.includes('madewell'))        return `https://www.madewell.com/search#searchTerm=${qp}`;
+    if (r.includes('other stories') || r.includes('& other')) return `https://www.stories.com/en_usd/search.html?q=${qp}`;
+    if (r.includes('cos'))             return `https://www.cosstores.com/en_usd/search-results.html?q=${qp}`;
+    if (r.includes('reformation'))     return `https://www.thereformation.com/search?query=${qp}`;
+    if (r.includes('toteme'))          return `https://www.toteme-studio.com/search?q=${qp}`;
+    if (r.includes('jacquemus'))       return `https://www.jacquemus.com/search?q=${qp}`;
+    if (r.includes('polene'))          return `https://www.polene-paris.com/search?q=${qp}`;
+    if (r.includes('sandro'))          return `https://us.sandro-paris.com/search?q=${qp}`;
+    if (r.includes('theory'))          return `https://www.theory.com/search?q=${qp}`;
+    if (r.includes('net-a-porter') || r.includes('net a porter')) return `https://www.net-a-porter.com/en-us/shop/search?keywords=${qp}`;
+    if (r.includes('everlane'))        return `https://www.everlane.com/search?query=${qp}`;
+    if (r.includes('uniqlo'))          return `https://www.uniqlo.com/us/en/search?q=${qp}`;
+    if (r.includes('veja'))            return `https://www.veja-store.com/en_US/catalogsearch/result/?q=${qp}`;
+    if (r.includes('cuyana'))          return `https://www.cuyana.com/search?q=${qp}`;
+    if (r.includes('eileen fisher'))   return `https://www.eileenfisher.com/search?q=${qp}`;
+    if (r.includes('banana republic')) return `https://bananarepublic.gap.com/browse/search.do?searchText=${qp}`;
+    if (r.includes('j.crew') || r.includes('j crew')) return `https://www.jcrew.com/search?Ntt=${qp}`;
+    if (r.includes('nordstrom'))       return `https://www.nordstrom.com/sr?origin=keywordsearch&keyword=${qp}`;
+    // Fallback: Google Shopping
+    return `https://www.google.com/search?tbm=shop&q=${encodeURIComponent((retailer || '') + ' ' + productName)}`;
+  }
+
+  /* ── Google Shopping URL for outfit items ────────────────────────────────── */
+  function shopItemUrl(retailerHint, itemName) {
+    const q = ((retailerHint || '') + ' ' + (itemName || ''))
+      .toLowerCase().trim()
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '+');
+    return `https://www.google.com/search?tbm=shop&q=${q}`;
+  }
+
+  /* Products — Pexels image per card, colored placeholder as fallback */
+  function renderProducts(products, sp, photos) {
+    const spColor = ((sp.colors || [])[0] || '').trim();
+    const spType  = (sp.item_type || '').trim();
+    const spTag   = ((sp.style_tags || [])[0] || '').trim();
+    const spQuery   = [spColor, spTag, spType].filter(Boolean).join(' ');
+    const dispLabel = [spColor, spTag, spType].filter(Boolean).join(' ');
+
+    const tierIcon  = { 'budget': '💚', 'mid-range': '⚡', 'luxury': '✦' };
+    const tierLabel = { 'budget': 'Budget', 'mid-range': 'Mid-Range', 'luxury': 'Luxury' };
+
+    document.getElementById('products-grid').innerHTML = products.map((p, i) => {
+      const bgColor  = tierColor(p.tier);
+      const icon     = itemEmoji(spType);
+      const shopUrl  = getShopUrl(p.retailer, spQuery);
+      const imgUrl   = (photos || [])[i];
+      const imgBlock = imgUrl
+        ? `<img class="product-pexels-img" src="${imgUrl}" alt="${dispLabel}" />`
+        : `<div class="product-img-placeholder" style="background:${bgColor}">
+             <div class="product-img-icon">${icon}</div>
+             <div class="product-img-label">${dispLabel}</div>
+           </div>`;
+      return `
+      <div class="product-card" id="product-card-${i}" data-tier="${p.tier}" data-query="${spQuery.replace(/"/g,'&quot;')}" data-retailer-idx="0">
+        <div class="tier-badge ${p.tier}">${tierIcon[p.tier] || ''} ${tierLabel[p.tier] || p.tier}</div>
+        ${imgBlock}
+        <div class="product-retailer">${p.retailer}</div>
+        <div class="product-name">${dispLabel}</div>
+        <div class="product-desc">${p.description}</div>
+        <div class="product-price">$${p.price.toFixed(0)} <span>USD</span></div>
+        <div class="product-colors">${(sp.colors||[]).map(c =>
+          `<div class="swatch-dot" style="background:${colorNameToHex(c)}" title="${c}"></div>`).join('')}</div>
+        <a href="${shopUrl}" target="_blank" rel="noopener" class="shop-btn">Shop at ${p.retailer} →</a>
+        <button class="swap-retailer-btn" onclick="swapRetailer(${i})">↻ Try another retailer</button>
+      </div>`;
+    }).join('');
+  }
+
+  /* Outfits — Pexels hero per card, gradient fallback */
+  function renderOutfits(outfits, sp, photos) {
+    const spColor = ((sp.colors || [])[0] || '').trim();
+    const spTag   = ((sp.style_tags || [])[0] || '').trim();
+
+    const catIcon = cat => {
+      cat = (cat || '').toLowerCase();
+      if (cat.includes('dress') || cat.includes('outerwear') || cat.includes('coat') || cat.includes('jacket')) return '🧥';
+      if (cat.includes('top') || cat.includes('shirt') || cat.includes('blouse') || cat.includes('knit') || cat.includes('sweat')) return '👚';
+      if (cat.includes('bottom') || cat.includes('pant') || cat.includes('jean') || cat.includes('skirt') || cat.includes('short')) return '👖';
+      if (cat.includes('shoe') || cat.includes('foot') || cat.includes('boot') || cat.includes('sneaker') || cat.includes('heel') || cat.includes('flat') || cat.includes('mule') || cat.includes('loafer') || cat.includes('sandal')) return '👟';
+      if (cat.includes('bag') || cat.includes('tote') || cat.includes('clutch') || cat.includes('purse')) return '👜';
+      if (cat.includes('scarf') || cat.includes('belt') || cat.includes('jewel') || cat.includes('watch')) return '✨';
+      if (cat.includes('hat') || cat.includes('cap')) return '🧢';
+      return '🎀';
+    };
+
+    document.getElementById('outfits-grid').innerHTML = outfits.map((o, i) => {
+      const gradient  = occasionGradient(o.occasion);
+      const heroIcon  = o.id === 1 ? '☕' : o.id === 2 ? '🌸' : '✈️';
+      const imgUrl    = (photos || [])[i];
+      const heroBlock = imgUrl
+        ? `<img class="outfit-pexels-img" src="${imgUrl}" alt="${o.name}" />`
+        : `<div class="outfit-hero-placeholder" style="background:${gradient}">
+             <div class="outfit-hero-icon">${heroIcon}</div>
+             <div class="outfit-hero-label">${o.name}</div>
+           </div>`;
+      return `
+      <div class="outfit-card">
+        ${heroBlock}
+        <div class="outfit-header">
+          <div class="outfit-number">Look ${o.id}</div>
+          <div class="outfit-name">${o.name}</div>
+          <div class="outfit-occasion">📍 ${o.occasion}</div>
+          <div class="outfit-vibe">"${o.vibe}"</div>
+        </div>
+        <div class="outfit-items">
+          ${(o.items || []).map(item => {
+            // Use the item's own name + color for the search query so
+            // "Gold Hoop Earrings" → searches "Gold Hoop Earrings gold"
+            // instead of inheriting the source garment's color/tag.
+            const itemQuery = [item.name, item.color].filter(Boolean).join(' ');
+            const itemLink  = shopItemUrl('', itemQuery);
+            return `
+            <a class="outfit-item-row" href="${itemLink}" target="_blank" rel="noopener">
+              <div class="outfit-item-icon">${catIcon(item.category)}</div>
+              <div class="outfit-item-details">
+                <div class="outfit-item-name">${item.name}</div>
+                <div class="outfit-item-meta">${item.color}${item.retailer_hint ? ' · ' + item.retailer_hint : ''}</div>
+              </div>
+              ${item.price_range ? `<div class="outfit-item-price">${item.price_range}</div>` : ''}
+            </a>`;
+          }).join('')}
+        </div>
+        <div class="outfit-tip">
+          <span class="outfit-tip-icon">💡</span>
+          ${o.styling_tip}
+        </div>
+      </div>
+    `;
+    }).join('');
+  }
+
+  /* Curator notes */
+  function renderCuratorNotes(notes) {
+    if (!notes) { document.getElementById('curator-notes').style.display = 'none'; return; }
+    document.getElementById('curator-notes').innerHTML = `
+      <div class="curator-notes-icon">✨</div>
+      <div class="curator-notes-text">${notes}</div>
+    `;
+  }
+
+  /* ── Color name → CSS color ─────────────────────────────────────────────── */
+  function colorNameToHex(name) {
+    const map = {
+      'black':'#1C1C1A','white':'#F8F8F6','cream':'#FFFDD0','ivory':'#FFFFF0',
+      'beige':'#E8DCC8','tan':'#C4A882','brown':'#8B6347','caramel':'#C4883C',
+      'red':'#C0392B','burgundy':'#722F37','wine':'#722F37','rust':'#C0632B',
+      'pink':'#F4A7B9','blush':'#F5C0C0','rose':'#E8A0A0','dusty rose':'#C89898',
+      'coral':'#FF7F6B','salmon':'#FA8072','peach':'#FFCBA4',
+      'orange':'#E8863C','terracotta':'#C4714A',
+      'yellow':'#F4D03F','mustard':'#D4A843','gold':'#C4A84A',
+      'green':'#5A8A5A','sage':'#8FAF8F','sage green':'#8FAF8F','olive':'#808000',
+      'mint':'#98D9C2','forest green':'#228B22','emerald':'#50C878',
+      'blue':'#4A7BB0','navy':'#1A3A5C','powder blue':'#B0C8E8','sky blue':'#87CEEB',
+      'cobalt':'#0047AB','denim':'#6F8FAF','light wash denim':'#A8B8D0',
+      'purple':'#7B5E9B','lavender':'#B89BC8','plum':'#7A3B5A','lilac':'#C8A8D8',
+      'grey':'#9B9590','gray':'#9B9590','charcoal':'#4A4A48','light grey':'#C8C4BF',
+      'silver':'#B0AEAC','natural':'#D4CABC',
+      'white cream':'#FDFAF5','off white':'#FAF8F3','cream white':'#FAF8F0',
+    };
+    const lower = name.toLowerCase();
+    for (const [key, val] of Object.entries(map)) {
+      if (lower.includes(key)) return val;
+    }
+    return '#C8C4BF';
+  }
+
+  /* ── Retailer pools by tier ──────────────────────────────────────────────── */
+  const RETAILER_POOLS = {
+    'budget':    ['ASOS', 'Zara', 'H&M', 'Target', 'Everlane', 'Uniqlo'],
+    'mid-range': ['Anthropologie', 'Madewell', 'Free People', 'COS', '& Other Stories', 'J.Crew', 'Banana Republic'],
+    'luxury':    ['Net-a-Porter', 'Toteme', 'Theory', 'Sandro', 'Reformation', 'Cuyana', 'Jacquemus'],
+  };
+
+  function swapRetailer(cardIdx) {
+    const card = document.getElementById(`product-card-${cardIdx}`);
+    const tier = card.dataset.tier;
+    const query = card.dataset.query;
+    let idx = parseInt(card.dataset.retailerIdx || '0');
+
+    const pool = RETAILER_POOLS[tier] || RETAILER_POOLS['mid-range'];
+    idx = (idx + 1) % pool.length;
+    card.dataset.retailerIdx = idx;
+
+    const newRetailer = pool[idx];
+    const newUrl = getShopUrl(newRetailer, query);
+
+    card.querySelector('.product-retailer').textContent = newRetailer;
+    const shopBtn = card.querySelector('.shop-btn');
+    shopBtn.textContent = `Shop at ${newRetailer} →`;
+    shopBtn.href = newUrl;
+  }
+
+  /* ── UI helpers ─────────────────────────────────────────────────────────── */
+  function showLoading() {
+    document.getElementById('upload-section').style.display = 'none';
+    document.getElementById('loading-section').style.display = 'block';
+    document.getElementById('results-section').style.display = 'none';
+  }
+
+  function resetUI() {
+    selectedFile = null; selectedUrl = null;
+    fileInput.value = '';
+    document.getElementById('upload-preview').src = '';
+    document.getElementById('upload-caption').textContent = '';
+    dropzone.classList.remove('has-preview');
+    document.getElementById('url-input').value = '';
+    document.getElementById('url-preview').style.display = 'none';
+    document.getElementById('cta-btn').disabled = true;
+    document.getElementById('upload-section').style.display = 'block';
+    document.getElementById('loading-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'none';
+    hideError();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-banner');
+    el.textContent = '⚠️ ' + msg;
+    el.style.display = 'block';
+  }
+
+  function hideError() {
+    document.getElementById('error-banner').style.display = 'none';
+  }
+</script>
+</body>
+</html>
