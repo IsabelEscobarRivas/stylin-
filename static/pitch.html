@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stylin' — Pitch Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAF9F7; --surface: #FFFFFF; --border: #E8E3DB;
+      --text: #1C1C1A; --text-muted: #6B6560; --accent: #C4714A;
+      --accent-hover: #B0603B; --accent-light: #F5E8E0;
+      --r: 12px; --r-lg: 16px;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    header {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--accent); }
+    .logo span { color: var(--text); font-size: 0.85rem; font-family: 'DM Sans', sans-serif; font-weight: 400; margin-left: 0.5rem; opacity: 0.6; }
+
+    main { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+
+    .hero { text-align: center; padding: 4rem 0 3rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.15; margin-bottom: 1.25rem; }
+    .hero h1 em { color: var(--accent); font-style: italic; }
+    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 560px; margin: 0 auto 2rem; line-height: 1.7; }
+    .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #fff; border: none; border-radius: var(--r);
+      padding: 0.9rem 2rem; font-size: 1rem; font-weight: 600; cursor: pointer;
+      text-decoration: none; transition: background 0.18s;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary {
+      background: var(--surface); color: var(--text); border: 1.5px solid var(--border);
+      border-radius: var(--r); padding: 0.9rem 2rem; font-size: 1rem; font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: border-color 0.18s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .section { margin: 4rem 0; }
+    .section h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 1rem; }
+    .section p { color: var(--text-muted); line-height: 1.75; max-width: 680px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+      padding: 1.75rem; transition: box-shadow 0.18s;
+    }
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .card p { font-size: 0.93rem; color: var(--text-muted); line-height: 1.6; }
+
+    .stat-row { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2rem; }
+    .stat { background: var(--accent-light); border-radius: var(--r-lg); padding: 1.5rem 2rem; text-align: center; flex: 1; min-width: 150px; }
+    .stat .number { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--accent); }
+    .stat .label { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    .pipeline {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+      padding: 2rem; margin-top: 2rem;
+    }
+    .pipeline-steps { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.25rem; }
+    .step {
+      background: var(--accent-light); border-radius: var(--r); padding: 0.75rem 1.25rem;
+      font-size: 0.9rem; font-weight: 500; color: var(--accent); flex: 1; min-width: 140px; text-align: center;
+    }
+    .arrow { color: var(--text-muted); font-size: 1.25rem; }
+
+    footer {
+      border-top: 1px solid var(--border); padding: 2rem; text-align: center;
+      color: var(--text-muted); font-size: 0.875rem; margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Stylin'<span>AI Fashion Intelligence</span></div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>Your personal style,<br /><em>decoded by AI</em></h1>
+      <p>Upload any fashion photo and receive a full style profile, curated outfit recommendations, and a named style persona — in seconds.</p>
+      <div class="cta-row">
+        <a href="/" class="btn-primary">Try Stylin' Now</a>
+        <a href="/health" class="btn-secondary">API Status</a>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="section">
+      <h2>Built for speed &amp; scale</h2>
+      <div class="stat-row">
+        <div class="stat"><div class="number">&lt;5s</div><div class="label">Vision Scout latency (p95)</div></div>
+        <div class="stat"><div class="number">&lt;15s</div><div class="label">Full pipeline (p95)</div></div>
+        <div class="stat"><div class="number">3</div><div class="label">Curated outfits per analysis</div></div>
+        <div class="stat"><div class="number">100%</div><div class="label">AI-powered, zero manual curation</div></div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section">
+      <h2>How it works</h2>
+      <p>Two specialised AI agents collaborate to deliver a complete fashion intelligence experience from a single image.</p>
+      <div class="pipeline">
+        <strong>Full Pipeline</strong>
+        <div class="pipeline-steps">
+          <div class="step">📸 Fashion Image</div>
+          <div class="arrow">→</div>
+          <div class="step">🔍 Vision Scout<br /><small>Extracts style data</small></div>
+          <div class="arrow">→</div>
+          <div class="step">✨ Style Curator<br /><small>Builds outfits</small></div>
+          <div class="arrow">→</div>
+          <div class="step">🎯 StyleProfile +<br />CurationResult</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section">
+      <h2>What you get</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <h3>Style Profile</h3>
+          <p>Item type, dominant colors, style tags, occasion, price tier, season, and a confidence score — all from one image.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">👗</div>
+          <h3>Style Persona</h3>
+          <p>A named persona (e.g., "The Urban Minimalist") with defining traits and a signature tagline tailored to the wearer.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛍️</div>
+          <h3>3 Curated Outfits</h3>
+          <p>Complete, shoppable outfit recommendations at budget, mid-range, and luxury price tiers — sourced intelligently.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>Dual Input Modes</h3>
+          <p>Analyze by image URL or direct file upload. Supports JPEG, PNG, and WebP up to 10MB.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔒</div>
+          <h3>Production-Ready Security</h3>
+          <p>Rate limiting, hidden API keys, disabled docs endpoint, and structured JSON logging in production.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h3>Open API</h3>
+          <p>RESTful endpoints with full Pydantic validation — integrate Stylin' intelligence into any app or workflow.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Endpoints -->
+    <section class="section">
+      <h2>API Reference</h2>
+      <p>Simple, predictable endpoints designed for developers.</p>
+      <div class="grid" style="margin-top:1.5rem;">
+        <div class="card"><div class="card-icon">🔗</div><h3>POST /stylin</h3><p>Full pipeline via image URL → StyleProfile + CurationResult</p></div>
+        <div class="card"><div class="card-icon">📤</div><h3>POST /stylin/upload</h3><p>Full pipeline via file upload</p></div>
+        <div class="card"><div class="card-icon">👁️</div><h3>POST /analyze</h3><p>Vision Scout only — image URL → StyleProfile</p></div>
+        <div class="card"><div class="card-icon">💚</div><h3>GET /health</h3><p>Liveness check for load balancers and monitoring</p></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; 2026 Stylin' — AI Fashion Intelligence &nbsp;·&nbsp; Built on Claude AI
+  </footer>
+
+</body>
+</html>
