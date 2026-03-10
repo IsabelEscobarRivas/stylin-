@@ -1,6 +1,7 @@
-
+...
 # Stylin' — AI-Powered Fashion Discovery Platform
 
+🏆 3rd Place Finalist — Complete AI Hackathon (lablab.ai × Complete.dev)
 > **See a look you love. Own it.**
 
 [![Status](https://img.shields.io/badge/status-active-brightgreen)](https://github.com)
